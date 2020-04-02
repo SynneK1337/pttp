@@ -27,6 +27,11 @@ mime_types = {
 }
 
 
+class MethodNotAllowed(Exception):
+    """405 Method Not Allowed"""
+    pass
+
+
 def parse_request(data):
     data = data.decode('utf-8')
     data = data.splitlines()
@@ -36,8 +41,7 @@ def parse_request(data):
     method, uri, version = data[0].split(' ')
 
     if method not in methods:
-        # TODO: Invalid Method Exception
-        raise Exception
+        raise MethodNotAllowed  # Return Error 405 to Client
 
     if ".." in uri:
         # TODO: Path Traversal Attempt Exception

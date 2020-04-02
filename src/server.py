@@ -1,7 +1,7 @@
 import socket
 import sys
 import threading
-import os
+import os.path
 import http
 
 
@@ -46,16 +46,20 @@ class Handler():
                 self.__del__()
             if data:
                 status = 200
-                request = http.parse_request(data)
-                path = os.path.join("htdocs/", request.uri)
+                try:
+                    request = http.parse_request(data)
+                except http.MethodNotAllowed:
+                    status = 405
+                    path = "error_sites/405.html"
+                else:
+                    path = os.path.join("htdocs/", request.uri)
                 try:
                     f = open(path, "rb")
                 except FileNotFoundError:
-                    f = open("error_sites/404.html", "rb")
                     status = 404
-                    ext = ".html"
-                else:
-                    _, ext = os.path.splitext(path)
+                    path = "error_sites/404.html"
+                    f = open("error_sites/404.html", "rb")
+                _, ext = os.path.splitext(path)
                 d = f.read()
                 f.close()
                 response = http.Response(d, content_type=http.mime_types[ext], status=status)
