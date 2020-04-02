@@ -20,11 +20,30 @@ methods = [
 
 mime_types = {
     ".html":    "text/html;charset=utf-8",
+    ".css":     "text/css",
+    ".xml":     "text/xml",
+    ".csv":     "text/csv",
+    ".txt":     "text/plain",
     ".json":    "application/json",
+    ".js":      "application/javascript",
+    ".zip":     "application/zip",
+    ".pdf":     "application/pdf",
+    ".sql":     "application/sql",
+    ".doc":     "application/msword",
+    ".docx":    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".xls":     "application/vnd.ms-excel",
+    ".xlsx":    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ".ppt":     "application/vnd.ms-powerpoint",
+    ".pptx":    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ".odt":     "application/vnd.oasis.opendocument.text",
+    ".zst":     "application/zstd",
+    ".mp3":     "audio/mpeg",
+    ".ogg":     "audio/ogg",
     ".jpg":     "image/jpeg",
     ".jpeg":    "image/jpeg",
     ".png":     "image/png",
-    ".css":     "text/css"
+    ".gif":     "image/gif"
+
 }
 
 
