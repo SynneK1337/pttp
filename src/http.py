@@ -60,8 +60,8 @@ class Request():
 
 
 class Response():
-    def __init__(self, data, content_type=mime_types[".html"], content_length=None, status=200, status_msg=None,
-                 version="HTTP/1.1"):
+    def __init__(self, data, content_type=mime_types[".html"], content_length=None,
+                 status=200, status_msg=None, version="HTTP/1.1"):
         self.status = status
         self.status_msg = status_codes[self.status]
         self.version = version
