@@ -32,38 +32,48 @@ class Handler():
     def __init__(self, conn, addr):
         self.conn = conn
         self.addr = addr
+        self.is_alive = True
         self.handle()
 
     def __del__(self):
         self.conn.close()
+        self.is_alive = False
 
     def handle(self):
-        while 1:
+        while self.is_alive:
             try:
                 data = self.conn.recv(1024)
             except ConnectionResetError:
-                print("[-] {addr} disconnected: Connection losed.")
+                print(f"[-] {self.addr} disconnected: Connection losed.")
                 self.__del__()
-            if data:
-                status = 200
-                try:
-                    request = http.parse_request(data)
-                except http.MethodNotAllowed:
-                    status = 405
-                    path = "error_sites/405.html"
-                else:
-                    path = os.path.join("htdocs/", request.uri)
-                try:
-                    f = open(path, "rb")
-                except FileNotFoundError:
-                    status = 404
-                    path = "error_sites/404.html"
-                    f = open("error_sites/404.html", "rb")
-                _, ext = os.path.splitext(path)
-                d = f.read()
-                f.close()
-                response = http.Response(d, content_type=http.mime_types[ext], status=status)
-                self.conn.sendall(response.get_raw())
+            else:
+                if data:
+                    status = 200
+                    try:
+                        request = http.parse_request(data)
+                    except http.MethodNotAllowed:
+                        status = 405
+                        path = "error_sites/405.html"
+                    except Exception:
+                        status = 400
+                        path = "error_sites/400.html"
+                    else:
+                        path = os.path.join("htdocs/", request.uri)
+                    try:
+                        f = open(path, "rb")
+                    except FileNotFoundError:
+                        status = 404
+                        path = "error_sites/404.html"
+                        f = open("error_sites/404.html", "rb")
+                    _, ext = os.path.splitext(path)
+                    d = f.read()
+                    f.close()
+                    response = http.Response(d, content_type=http.mime_types[ext], status=status)
+                    try:
+                        self.conn.sendall(response.get_raw())
+                    except OSError:
+                        self.__del__()
+                        print(f"[i] {self.addr} ended the connection.")
 
 
 if __name__ == "__main__":
