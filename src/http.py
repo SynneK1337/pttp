@@ -23,7 +23,8 @@ mime_types = {
     ".json":    "application/json",
     ".jpg":     "image/jpeg",
     ".jpeg":    "image/jpeg",
-    ".png":     "image/png"
+    ".png":     "image/png",
+    ".css":     "text/css"
 }
 
 
@@ -47,8 +48,6 @@ def parse_request(data):
         # TODO: Path Traversal Attempt Exception
         raise Exception
 
-    if uri == '/':
-        uri = "index.html"
     return Request(method, uri, version)
 
 

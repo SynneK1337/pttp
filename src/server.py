@@ -58,7 +58,9 @@ class Handler():
                         status = 400
                         path = "error_sites/400.html"
                     else:
-                        path = os.path.join("htdocs/", request.uri)
+                        if request.uri == '/':
+                            request.uri = "/index.html"
+                        path = os.path.join("htdocs/", request.uri[1:])
                     try:
                         f = open(path, "rb")
                     except FileNotFoundError:
@@ -66,6 +68,7 @@ class Handler():
                         path = "error_sites/404.html"
                         f = open("error_sites/404.html", "rb")
                     _, ext = os.path.splitext(path)
+                    print(f"[i] {self.addr} requested {request.uri}")
                     d = f.read()
                     f.close()
                     response = http.Response(d, content_type=http.mime_types[ext], status=status)
