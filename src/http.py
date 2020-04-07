@@ -1,3 +1,5 @@
+from date import get_current_date
+
 status_codes = {
     # Informational
     100: "Continue",
@@ -121,18 +123,22 @@ class Request():
 
 class Response():
     def __init__(self, data, content_type=mime_types[".html"], content_length=None,
-                 status=200, status_msg=None, version="HTTP/1.1"):
+                 status=200, status_msg=None, version="HTTP/1.1", server_name="pttp"):
         self.status = status
         self.status_msg = status_codes[self.status]
         self.version = version
         self.content_type = content_type
         self.data = data
         self.content_length = len(self.data)
+        self.server_name = server_name
+        self.date = get_current_date()
 
     def get_raw(self):
         return f"""{self.version} {self.status} {self.status_msg}
 Content-Type: {self.content_type}
 Content-Length: {self.content_length}
+Server: {self.server_name}
+Date: {self.date}
 
-{self.data.decode('utf-8')}
+{self.data}
 """.encode('utf-8')

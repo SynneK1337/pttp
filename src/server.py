@@ -62,11 +62,11 @@ class Handler():
                             request.uri = "/index.html"
                         path = os.path.join("htdocs/", request.uri[1:])
                     try:
-                        f = open(path, "rb")
+                        f = open(path, "r")
                     except FileNotFoundError:
                         status = 404
                         path = "error_sites/404.html"
-                        f = open("error_sites/404.html", "rb")
+                        f = open("error_sites/404.html", "r")
                     _, ext = os.path.splitext(path)
                     print(f"[i] {self.addr} requested {request.uri}")
                     d = f.read()
